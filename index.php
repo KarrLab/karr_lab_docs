@@ -105,7 +105,7 @@
 <?php
 
 foreach (scandir('.') as $repo) {
-    if (file_exists("$repo/index.html")) {
+    if (file_exists("$repo/.htaccess") && strpos(file_get_contents("$repo/.htaccess"), 'RewriteEngine') === 0) {
         echo sprintf("<tr><td><a href='https://github.com/KarrLab/%s'>%s</a></td><td><a href='%s'>docs</a></td></tr>\n", $repo, $repo, $repo);
     }
 }
