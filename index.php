@@ -30,11 +30,11 @@
             }
             #docs th,
             #docs td {
-                padding-left:2px;
-                padding-right:2px;
+                padding-left:20px;
+                padding-right:20px;
                 padding-top:4px;
                 padding-bottom:4px;
-                width: 50%;
+                width: auto;
             }
         </style>
     </head>
@@ -99,6 +99,8 @@
                                     <tr>
                                         <th>Package</th>
                                         <th>Documentation</th>
+                                        <th>Latest version</th>
+                                        <th>Last updated</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -106,7 +108,25 @@
 
 foreach (scandir('.') as $repo) {
     if (file_exists("$repo/.htaccess") && strpos(file_get_contents("$repo/.htaccess"), 'RewriteEngine') === 0) {
-        echo sprintf("<tr><td><a href='https://github.com/KarrLab/%s'>%s</a></td><td><a href='%s'>docs</a></td></tr>\n", $repo, $repo, $repo);
+        echo "<tr>";
+        echo sprintf("<td><a href='https://github.com/KarrLab/%s'>%s</a></td>", $repo, $repo);
+        echo sprintf("<td><a href='%s'>docs</a></td>", $repo);
+        
+        $version = array_pop(scandir("$repo/master/"));
+        if (preg_match('/^\d+\.\d+\.\d+[a-zA-Z0-9]*$/', $version) != 1)
+            $version = '';
+        echo sprintf("<td><a href='%s'>%s</a></td>", $repo, $version);
+        
+        if ($version) {
+            if (file_exists("$repo/master/$version/index.html"))
+                $last_updated = date('Y-m-d H:i:s', filemtime("$repo/master/$version/index.html"));
+            else
+                $last_updated = date('Y-m-d H:i:s', filemtime("$repo/master/$version"));
+        } else {
+            $last_updated = '';
+        }
+        echo sprintf("<td><a href='%s'>%s</a></td>", $repo, $last_updated);
+        echo "</tr>\n";
     }
 }
 
