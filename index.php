@@ -112,7 +112,9 @@ foreach (scandir('.') as $repo) {
         echo sprintf("<td><a href='https://github.com/KarrLab/%s'>%s</a></td>", $repo, $repo);
         echo sprintf("<td><a href='%s'>docs</a></td>", $repo);
         
-        $version = array_pop(scandir("$repo/master/"));
+		$versions = scandir("$repo/master/");
+		natsort($versions);
+        $version = array_pop($versions);
         if (preg_match('/^\d+\.\d+\.\d+[a-zA-Z0-9]*$/', $version) != 1)
             $version = '';
         echo sprintf("<td><a href='%s'>%s</a></td>", $repo, $version);
