@@ -115,7 +115,7 @@ foreach (scandir('.') as $repo) {
 		$versions = scandir("$repo/master/");
 		natsort($versions);
         $version = array_pop($versions);
-        if (preg_match('/^\d+\.\d+\.\d+[a-zA-Z0-9]*$/', $version) != 1)
+        if (preg_match('/^\d+(\.\d+(\.\d+[a-zA-Z0-9]*)?)?$/', $version) != 1)
             $version = '';
         echo sprintf("<td><a href='%s'>%s</a></td>", $repo, $version);
         
